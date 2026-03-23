@@ -77,10 +77,18 @@ export class TmuxSessionManager {
     this.cmuxConfig = cmuxConfig
     this.deps = deps
     const defaultPort = process.env.OPENCODE_PORT ?? "4096"
+    const fallbackUrl = `http://localhost:${defaultPort}`
     try {
-      this.serverUrl = ctx.serverUrl?.toString() ?? `http://localhost:${defaultPort}`
+      const raw = ctx.serverUrl?.toString()
+      if (raw) {
+        const parsed = new URL(raw)
+        const port = parsed.port || (parsed.protocol === 'https:' ? '443' : '80')
+        this.serverUrl = port === '0' ? fallbackUrl : raw
+      } else {
+        this.serverUrl = fallbackUrl
+      }
     } catch {
-      this.serverUrl = `http://localhost:${defaultPort}`
+      this.serverUrl = fallbackUrl
     }
     this.sourcePaneId = deps.getCurrentPaneId()
     this.pollingManager = new TmuxPollingManager(
