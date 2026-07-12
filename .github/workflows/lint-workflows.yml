@@ -14,6 +14,8 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
+      - name: Set up Aikido Safe Chain
+        uses: ./.github/actions/setup-safe-chain
       - name: Install actionlint
         run: |
           bash <(curl -sSL https://raw.githubusercontent.com/rhysd/actionlint/v1.7.10/scripts/download-actionlint.bash)

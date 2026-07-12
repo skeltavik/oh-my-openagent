@@ -59,6 +59,8 @@ jobs:
         with:
           bun-version: latest
 
+      - name: Set up Aikido Safe Chain
+        uses: ./.github/actions/setup-safe-chain
       - name: Cache Bun dependencies
         uses: actions/cache@v4
         with:
